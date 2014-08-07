@@ -9,6 +9,7 @@
 namespace kartik\helpers;
 
 use yii\base\InvalidConfigException;
+use Yii;
 
 /**
  * Collection of useful helper functions for Yii Applications
@@ -397,9 +398,9 @@ class Enum extends \yii\helpers\Inflector
             };
         }
         if ($unit == 'month') {
-            return $abbr ? array_map($substr, static::$months) : static::$months;
+            return $abbr ? array_map($substr, static::translate(static::$months)) : static::translate(static::$months);
         } elseif ($unit == 'day') {
-            return $abbr ? array_map($substr, static::$days) : static::$days;
+            return $abbr ? array_map($substr, static::translate(static::$days)) : static::translate(static::$days);
         } else {
             throw new InvalidConfigException("Invalid date unit passed. Must be 'date', 'day', or 'month'.");
         }
@@ -711,5 +712,19 @@ class Enum extends \yii\helpers\Inflector
         }
         return $version;
     }
+
+    /**
+     * Translate array of const
+     * @param array $const array of const
+     */
+    protected static function translate($const)
+    {
+        $result = [];
+        foreach ($const as $v){
+            $result[] = Yii::t('enum', $v);
+        }
+        return $result;
+    }
+
 
 }
